@@ -12,8 +12,8 @@ RUN npm run build
 # Stage 2 — Serve with nginx
 FROM nginx:alpine
 
-# Copy built Angular files
-COPY --from=builder /app/dist/flask-cicd-frontend/browser /usr/share/nginx/html
+# Copy built Angular files — match actual output path
+COPY --from=builder /app/dist/frontend/browser /usr/share/nginx/html
 
 # Copy nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
