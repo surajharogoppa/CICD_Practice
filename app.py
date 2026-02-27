@@ -135,6 +135,9 @@ HTML = """
             color: #ccc;
             min-height: 44px;
             display: none;
+            word-break: break-all;   /* ← add this */
+            overflow-wrap: break-word; /* ← and this as backup */
+        }
         }
 
         .result.show { display: block; }
