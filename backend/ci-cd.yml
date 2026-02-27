@@ -9,20 +9,19 @@ on:
 jobs:
 
   test-backend:
-    name: Test Flask Backend
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Run tests
-        run: pytest
+  name: Test Flask Backend
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Show file structure
+      run: find . -type f -name "*.txt" && ls -la && ls -la backend/
+    - name: Install dependencies
+      run: pip install -r backend/requirements.txt
+    - name: Run tests
+      run: cd backend && pytest
 
   test-frontend:
     name: Build Angular Frontend
