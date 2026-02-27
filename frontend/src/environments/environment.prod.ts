@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-flask-api.onrender.com'  // ← replace with your Render backend URL
+  apiUrl: 'https://cicd-practice-bn62.onrender.com'  // ← replace with your Render backend URL
 };
