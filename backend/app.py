@@ -5,7 +5,9 @@ import random
 import hashlib
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:4200"])  # Allow Angular frontend to call this API
+CORS(app, origins=["http://localhost:4200",
+                   "https://cicd-practice-frontend.onrender.com"
+                   ])  # Allow Angular frontend to call this API
 
 # ─── In-Memory Storage ────────────────────────────────────
 
