@@ -1,13 +1,21 @@
 from flask import Flask, jsonify
 import os
+import datetime
 
 app = Flask(__name__)
 
+visit_counter = {"count": 0}
+
+# ─── Home ─────────────────────────────────────────────────
+
 @app.route("/")
 def home():
+    visit_counter["count"] += 1
     return jsonify({
-        "message": "Hello, Flask CI/CD!",
-        "status": "success"
+        "message": "Welcome to Flask API!",
+        "status" : "success",
+        "total_visits": visit_counter["count"],
+        "time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     })
 
 @app.route("/health")
