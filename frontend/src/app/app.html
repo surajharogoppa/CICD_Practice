@@ -1,0 +1,214 @@
+<!-- Header -->
+<header>
+  <div class="logo">⚡ Flask<span>API</span></div>
+  <p class="tagline">Angular + Flask · Docker · GitHub Actions · Render</p>
+</header>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-number">{{ stats.total_visits || 0 }}</div>
+    <div class="stat-label">Visits</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">{{ messages.length }}</div>
+    <div class="stat-label">Messages</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number green">{{ stats.status || '...' }}</div>
+    <div class="stat-label">Status</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number blue">{{ stats.time?.split(' ')[1] || '--:--' }}</div>
+    <div class="stat-label">Server Time</div>
+  </div>
+</div>
+
+<!-- Grid -->
+<div class="container">
+  <div class="grid">
+
+    <!-- Joke -->
+    <div class="card">
+      <div class="card-header">
+        <h2>😂 Random Joke</h2>
+        <span class="badge get">GET</span>
+      </div>
+      <p class="card-desc">Get a random developer joke.</p>
+      <button (click)="getJoke()" [disabled]="jokeLoading">
+        {{ jokeLoading ? 'Loading...' : 'Get Joke' }}
+      </button>
+      @if (joke) {
+        <div class="result">
+          <div class="joke-setup">"{{ joke.setup }}"</div>
+          <div class="joke-punchline">→ {{ joke.punchline }}</div>
+        </div>
+      }
+    </div>
+
+    <!-- Quote -->
+    <div class="card">
+      <div class="card-header">
+        <h2>💬 Quote</h2>
+        <span class="badge get">GET</span>
+      </div>
+      <p class="card-desc">Get an inspiring programming quote.</p>
+      <button (click)="getQuote()" [disabled]="quoteLoading">
+        {{ quoteLoading ? 'Loading...' : 'Get Quote' }}
+      </button>
+      @if (quote) {
+        <div class="result">
+          <div class="quote-text">"{{ quote.quote }}"</div>
+          <div class="quote-author">— {{ quote.author }}</div>
+        </div>
+      }
+    </div>
+
+    <!-- Coin Flip -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🪙 Coin Flip</h2>
+        <span class="badge get">GET</span>
+      </div>
+      <p class="card-desc">Flip a coin and test your luck.</p>
+      <button (click)="coinFlip()" [disabled]="coinLoading">
+        {{ coinLoading ? 'Flipping...' : 'Flip Coin' }}
+      </button>
+      @if (coinResult) {
+        <div class="result coin-result">
+          <span class="coin-emoji">{{ coinResult === 'Heads' ? '🌝' : '🌚' }}</span>
+          <span class="coin-text">{{ coinResult }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Dice -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🎲 Dice Roller</h2>
+        <span class="badge get">GET</span>
+      </div>
+      <p class="card-desc">Roll dice with custom sides and count.</p>
+      <input type="number" [(ngModel)]="diceSides" placeholder="Sides (2-100)" min="2" max="100"/>
+      <input type="number" [(ngModel)]="diceCount" placeholder="Count (1-10)" min="1" max="10"/>
+      <button (click)="rollDice()" [disabled]="diceLoading">
+        {{ diceLoading ? 'Rolling...' : 'Roll Dice' }}
+      </button>
+      @if (diceResult) {
+        <div class="result">
+          🎲 <b>{{ diceResult.rolls.join(', ') }}</b> | Total: <b>{{ diceResult.total }}</b>
+        </div>
+      }
+    </div>
+
+    <!-- Register -->
+    <div class="card">
+      <div class="card-header">
+        <h2>👤 Register</h2>
+        <span class="badge post">POST</span>
+      </div>
+      <p class="card-desc">Create a new user account.</p>
+      <input type="text" [(ngModel)]="regUsername" placeholder="Username"/>
+      <input type="password" [(ngModel)]="regPassword" placeholder="Password"/>
+      <button (click)="register()" [disabled]="regLoading">
+        {{ regLoading ? 'Registering...' : 'Register' }}
+      </button>
+      @if (regMessage) { <div class="result success">✅ {{ regMessage }}</div> }
+      @if (regError)   { <div class="result error">❌ {{ regError }}</div> }
+    </div>
+
+    <!-- Login -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🔐 Login</h2>
+        <span class="badge post">POST</span>
+      </div>
+      <p class="card-desc">Login with your credentials.</p>
+      <input type="text" [(ngModel)]="loginUsername" placeholder="Username"/>
+      <input type="password" [(ngModel)]="loginPassword" placeholder="Password"/>
+      <button (click)="login()" [disabled]="loginLoading">
+        {{ loginLoading ? 'Logging in...' : 'Login' }}
+      </button>
+      @if (loginMessage) { <div class="result success">✅ {{ loginMessage }}</div> }
+      @if (loginError)   { <div class="result error">❌ {{ loginError }}</div> }
+    </div>
+
+    <!-- Post Message -->
+    <div class="card">
+      <div class="card-header">
+        <h2>📝 Post Message</h2>
+        <span class="badge post">POST</span>
+      </div>
+      <p class="card-desc">Post a public message (must be registered).</p>
+      <input type="text" [(ngModel)]="msgUsername" placeholder="Your username"/>
+      <input type="text" [(ngModel)]="msgText" placeholder="Your message (max 200)"/>
+      <button (click)="postMessage()" [disabled]="msgLoading">
+        {{ msgLoading ? 'Posting...' : 'Post Message' }}
+      </button>
+      @if (msgResult) { <div class="result success">✅ {{ msgResult }}</div> }
+      @if (msgError)  { <div class="result error">❌ {{ msgError }}</div> }
+    </div>
+
+    <!-- Message Board -->
+    <div class="card">
+      <div class="card-header">
+        <h2>📋 Message Board</h2>
+        <span class="badge get">GET</span>
+      </div>
+      <p class="card-desc">Latest public messages from all users.</p>
+      <button (click)="loadMessages()">Refresh</button>
+      <div class="message-list">
+        @for (m of messages; track m.id) {
+          <div class="message-item">
+            <span class="msg-user">{{ m.username }}</span>: {{ m.text }}
+            <div class="msg-time">{{ m.posted_at }}</div>
+          </div>
+        }
+        @if (messages.length === 0) {
+          <div class="empty">No messages yet.</div>
+        }
+      </div>
+    </div>
+
+    <!-- Reverse -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🔁 Reverse Text</h2>
+        <span class="badge post">POST</span>
+      </div>
+      <p class="card-desc">Reverse any string instantly.</p>
+      <input type="text" [(ngModel)]="reverseInput" placeholder="Type something..."/>
+      <button (click)="reverseText()" [disabled]="reverseLoading">
+        {{ reverseLoading ? 'Reversing...' : 'Reverse' }}
+      </button>
+      @if (reverseResult) {
+        <div class="result reverse-result">🔁 <b>{{ reverseResult }}</b></div>
+      }
+    </div>
+
+    <!-- Word Count -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🔤 Word Count</h2>
+        <span class="badge post">POST</span>
+      </div>
+      <p class="card-desc">Count words and characters in text.</p>
+      <input type="text" [(ngModel)]="wcInput" placeholder="Type something..."/>
+      <button (click)="wordCount()" [disabled]="wcLoading">
+        {{ wcLoading ? 'Counting...' : 'Count' }}
+      </button>
+      @if (wcResult) {
+        <div class="result">
+          Words: <b>{{ wcResult.word_count }}</b> |
+          Chars: <b>{{ wcResult.char_count }}</b> |
+          No spaces: <b>{{ wcResult.char_count_no_spaces }}</b>
+        </div>
+      }
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Built with Angular + Flask · Dockerized · CI/CD via GitHub Actions · Hosted on Render
+</footer>
