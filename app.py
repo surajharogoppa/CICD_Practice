@@ -14,6 +14,24 @@ def home():
 def health():
     return jsonify({"status": "healthy"}), 200
 
+@app.route("/info")
+def info():
+    return jsonify({
+        "python_version": platform.python_version(),
+        "os": platform.system(),
+        "server_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "environment": os.getenv("FLASK_ENV", "development")
+    })
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({"error": "Route not found"}), 404
+
+@app.errorhandler(500)
+def server_error(e):
+    return jsonify({"error": "Internal server error"}), 500
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
