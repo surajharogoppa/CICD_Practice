@@ -8,37 +8,37 @@ on:
 
 jobs:
 
+  # ─── Job 1: Test Backend ──────────────────────────────
   test-backend:
-  name: Test Flask Backend
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: "3.11"
-    - name: Show file structure
-      run: find . -type f -name "*.txt" && ls -la && ls -la backend/
-    - name: Install dependencies
-      run: pip install -r backend/requirements.txt
-    - name: Run tests
-      run: cd backend && pytest
+    name: Test Flask Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install & Test
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pytest
 
+  # ─── Job 2: Test Frontend ─────────────────────────────
   test-frontend:
     name: Build Angular Frontend
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Install dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
+      - name: Install & Build
+        run: |
+          cd frontend
+          npm install
+          npm run build
 
+  # ─── Job 3: Deploy Backend to Render ─────────────────
   deploy-backend:
     name: Deploy Backend
     runs-on: ubuntu-latest
@@ -67,6 +67,7 @@ jobs:
       - name: Trigger Render Backend Deploy
         run: curl -X POST "${{ secrets.RENDER_BACKEND_DEPLOY_HOOK }}"
 
+  # ─── Job 4: Deploy Frontend to Render ────────────────
   deploy-frontend:
     name: Deploy Frontend
     runs-on: ubuntu-latest
