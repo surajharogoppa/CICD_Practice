@@ -23,7 +23,7 @@ jobs:
           pip install -r requirements.txt
           pytest
 
-  # ─── Job 2: Test Frontend ─────────────────────────────
+  # ─── Job 2: Build Angular Frontend ───────────────────
   test-frontend:
     name: Build Angular Frontend
     runs-on: ubuntu-latest
@@ -38,7 +38,7 @@ jobs:
           npm install
           npm run build
 
-  # ─── Job 3: Deploy Backend to Render ─────────────────
+  # ─── Job 3: Deploy Backend ────────────────────────────
   deploy-backend:
     name: Deploy Backend
     runs-on: ubuntu-latest
@@ -67,7 +67,7 @@ jobs:
       - name: Trigger Render Backend Deploy
         run: curl -X POST "${{ secrets.RENDER_BACKEND_DEPLOY_HOOK }}"
 
-  # ─── Job 4: Deploy Frontend to Render ────────────────
+  # ─── Job 4: Deploy Frontend ───────────────────────────
   deploy-frontend:
     name: Deploy Frontend
     runs-on: ubuntu-latest
